@@ -1,7 +1,5 @@
 package com.myfinance.backend.config.services;
 
-import java.util.Objects;
-
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -145,7 +143,7 @@ public class SettingsColorsService {
     private Long getUserId(String token) {
         try {
 
-            String userServiceUrl = "http://192.168.1.2:8081/api/users/view";
+            String userServiceUrl = "http://192.168.1.9:8081/api/users/view";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", token);
