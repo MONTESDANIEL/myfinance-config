@@ -79,12 +79,13 @@ mvn spring-boot:run
 ```sh
 myfinance-config/
 │── src/main/java/com/myfinance/backend/config/
-│   ├── controller/  # Controladores REST
-│   ├── service/     # Lógica de negocio
-│   ├── repository/  # Acceso a la base de datos
-│   ├── exceptions/  # Control de excepciones
+│   ├── config/      # Configuración de seguridad
+│   ├── controllers/  # Controladores REST
 │   ├── entities/    # Entidades
-│   ├── security/    # Configuración de autenticación
+│   ├── service/     # Lógica de negocio
+│   ├── exceptions/  # Control de excepciones
+│   ├── repositories/  # Acceso a la base de datos
+│   ├── services/    # Configuración de autenticación
 │── src/main/java/com/myfinance/backend/config/resources/
 │   ├── application.properties  # Configuración del microservicio
 │── Dockerfile     # Configuración para contenedorización
