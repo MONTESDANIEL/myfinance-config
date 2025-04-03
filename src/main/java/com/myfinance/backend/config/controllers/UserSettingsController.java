@@ -47,6 +47,12 @@ public class UserSettingsController {
         return response;
     }
 
+    @PutMapping("/resetToDefaultSettings")
+    public ResponseEntity<?> resetToDefaultSettings(@RequestHeader("Authorization") String authorizationToken) {
+        ResponseEntity<?> response = settingsUser.resetToDefaultSettings(authorizationToken);
+        return response;
+    }
+
     // Favorite Colors
     @GetMapping("/viewUserFavoriteColors")
     public ResponseEntity<?> viewUserFavoriteColors(@RequestHeader("Authorization") String authorizationToken) {
