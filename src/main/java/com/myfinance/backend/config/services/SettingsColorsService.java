@@ -84,10 +84,6 @@ public class SettingsColorsService {
                 return createApiResponse(HttpStatus.BAD_REQUEST, "No se pudo cargar el usuario.", null);
             }
 
-            if (!Objects.equals(userId, updateFavoriteColors.getUserId())) {
-                return createApiResponse(HttpStatus.UNAUTHORIZED, "Acceso no autorizado.", null);
-            }
-
             if (colorsRepository.findById(userId).isEmpty()) {
                 return createApiResponse(HttpStatus.BAD_REQUEST, "No se pueden actualizar los colores.",
                         null);
@@ -95,6 +91,7 @@ public class SettingsColorsService {
 
             FavoriteColors favoriteColors = colorsRepository.findById(userId).get();
 
+            favoriteColors.setUserId(userId);
             favoriteColors.setIncomeColor(updateFavoriteColors.getIncomeColor());
             favoriteColors.setSavingsColor(updateFavoriteColors.getSavingsColor());
             favoriteColors.setExpenseColor(updateFavoriteColors.getExpenseColor());

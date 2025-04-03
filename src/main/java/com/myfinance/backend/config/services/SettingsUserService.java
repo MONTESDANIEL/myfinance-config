@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.myfinance.backend.config.entities.ApiResponse;
 import com.myfinance.backend.config.entities.AppUser;
+import com.myfinance.backend.config.entities.FavoriteColors;
 import com.myfinance.backend.config.entities.UserSettings;
 import com.myfinance.backend.config.repositories.UserSettingsRepository;
 
@@ -91,10 +92,6 @@ public class SettingsUserService {
                 return createApiResponse(HttpStatus.BAD_REQUEST, "No se pudo cargar el usuario.", null);
             }
 
-            if (!Objects.equals(userId, updateUserSettings.getUserId())) {
-                return createApiResponse(HttpStatus.UNAUTHORIZED, "Acceso no autorizado.", null);
-            }
-
             if (userSettingsRepository.findById(userId).isEmpty()) {
                 return createApiResponse(HttpStatus.BAD_REQUEST, "No se pueden actualizar las configuraciones.",
                         null);
@@ -102,6 +99,7 @@ public class SettingsUserService {
 
             UserSettings userSettings = userSettingsRepository.findById(userId).get();
 
+            userSettings.setUserId(userId);
             userSettings.setTwoFactorAuth(updateUserSettings.getTwoFactorAuth());
             userSettings.setPreferredAuthMethod(updateUserSettings.getPreferredAuthMethod());
             userSettings.setPreferredPasswordRecovery(updateUserSettings.getPreferredPasswordRecovery());
@@ -114,6 +112,42 @@ public class SettingsUserService {
             // Manejo de errores
             return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Ocurrió un error al intentar actualizar las configuraciones de usuario.", null);
+        }
+    }
+
+    // Restablecer a colores predeterminados
+    public ResponseEntity<?> resetToDefaultSettings(String token) {
+        try {
+
+            Long userId = getUserId(token);
+
+            if (userId == null) {
+                return createApiResponse(HttpStatus.BAD_REQUEST, "No se pudo cargar el usuario.", null);
+            }
+
+            if (userSettingsRepository.findById(userId).isEmpty()) {
+                return createApiResponse(HttpStatus.BAD_REQUEST, "No se pudo restablecer los colores del usuario",
+                        null);
+            }
+
+            // Obtener el movimiento existente
+            UserSettings userSettings = userSettingsRepository.findById(userId).get();
+
+            // Actualizar los campos del movimiento
+            userSettings.setUserId(userId);
+            userSettings.setTwoFactorAuth(false);
+            userSettings.setPreferredAuthMethod("email");
+            userSettings.setPreferredPasswordRecovery("email");
+
+            // Guardar el movimiento actualizado
+            userSettingsRepository.save(userSettings);
+
+            // Respuesta exitosa
+            return createApiResponse(HttpStatus.OK, "Los colores restablecidos con éxito.", null);
+        } catch (Exception e) {
+            // Manejo de errores
+            return createApiResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Ocurrió un error al intentar restablecer los colores.", null);
         }
     }
 

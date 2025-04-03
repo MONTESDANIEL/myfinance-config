@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 public class UserSettings {
 
     @Id
-    @NotNull(message = "El ID de usuario no puede ser nulo")
     @Column(nullable = false, unique = true)
     private Long userId;
 
